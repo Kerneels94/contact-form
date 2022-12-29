@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" type="text/css" />
+    <title>COntact form</title>
+  </head>
+  <body>
+    <!-- Form -->
+    <section>
+      <form action="formvalidation.php" method="post" class="form">
+        <label for="fname">First Name</label>
+        <input type="text" required aria-required="required" />
+
+        <label for="sname">Surname</label>
+        <input type="text" required aria-required="required" />
+
+        <label for="email">Email</label>
+        <input type="email" required aria-required="required" />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          required
+          aria-required="required"
+        />
+
+        <label for="cpassword">Confirm Password</label>
+        <input
+          type="password"
+          name="cpassword"
+          id="cpassword"
+          required
+          aria-required="required"
+        />
+
+        <input type="submit" class="submit-button" value="Login" />
+      </form>
+    </section>
+    <script src="./app.js"></script>
+  </body>
+</html>
