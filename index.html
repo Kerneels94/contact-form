@@ -10,23 +10,27 @@
   <body>
     <!-- Form -->
     <section>
-      <form action="formvalidation.php" method="post" class="form">
+      <form
+        action="formvalidation.php"
+        method="post"
+        class="form"
+        name="myForm"
+      >
         <label for="fname">First Name</label>
-        <input type="text" required aria-required="required" />
+        <input type="text" " data-key="fname" name="fname" />
 
         <label for="sname">Surname</label>
-        <input type="text" required aria-required="required" />
+        <input type="text" data-key="sname" name="sname" />
 
         <label for="email">Email</label>
-        <input type="email" required aria-required="required" />
+        <input type="email" data-key="email" name="email" />
 
         <label for="password">Password</label>
         <input
           type="password"
           name="password"
           id="password"
-          required
-          aria-required="required"
+          data-key="password"
         />
 
         <label for="cpassword">Confirm Password</label>
@@ -34,11 +38,15 @@
           type="password"
           name="cpassword"
           id="cpassword"
-          required
-          aria-required="required"
+          data-key="cpassword"
         />
 
-        <input type="submit" class="submit-button" value="Login" />
+        <input
+          type="submit"
+          class="submit-button"
+          value="Login"
+          data-key="submit"
+        />
       </form>
     </section>
     <script src="./app.js"></script>
