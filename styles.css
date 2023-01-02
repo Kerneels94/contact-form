@@ -53,3 +53,15 @@ input[type="password"] {
   background-color: var(--backgroundColor);
   color: aliceblue;
 }
+
+/* Data */
+
+.data {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 2rem;
+  margin: 0 auto;
+  color: #262626;
+}
