@@ -27,7 +27,6 @@ const checkPassword = () => {
 };
 
 const validateEmail = () => {
-  console.log(emailID);
   atpos = emailID.indexOf("@");
   dotpos = emailID.lastIndexOf(".");
 

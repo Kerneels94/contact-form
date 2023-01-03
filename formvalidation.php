@@ -1,19 +1,43 @@
 <?php
 require_once 'db.php';
-$name = $sname = $email = $password = '';
+$fname = $sname = $email = $password = '';
 $nameError = $snameError = $emailError = $passwordError = '';
+$dataReceived = false;
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     empty($_POST['fname']) ? $nameError = "Name is required" : $name = test_data($_POST['fname']);
     empty($_POST['sname']) ? $snameError = "SurnName is required" : $sname = test_data($_POST['sname']);
     empty($_POST['email']) ? $emailError = "Email is required" : $email = test_data($_POST['email']);
     empty($_POST['password']) ? $passwordError = "Password is required" : $password = test_data($_POST['password']);
-
-    $name = $_REQUEST['fname'];
+    $fname = $_REQUEST['fname'];
     $sname = $_REQUEST['sname'];
     $email = $_REQUEST['email'];
     $password = $_REQUEST['password'];
 }
+
+// Check if the name only contains /,letters, apostrophes and whitespace
+if (!preg_match("/^[a-zA-Z-' ]*$/", $fname)) {
+    $nameError = 'Only letters allowed';
+}
+
+if (!preg_match("/^[a-zA-Z-' ]*$/", $sname)) {
+    $surnameError = 'Only letters allowed';
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $emailError = "Invalid email format";
+}
+
+// Insert data into database
+$dataFromForm = "INSERT INTO info (name, sname, email, password) values('$fname', '$sname', '$email', '$password')";
+$result = mysqli_query($conn, $dataFromForm);
+
+if ($result) {
+    $dataReceived = true;
+} else {
+    echo "ERROR" . mysqli_error($conn);
+}
+
 
 // Test data and remove special characters
 function test_data($data)
@@ -24,33 +48,29 @@ function test_data($data)
     return $data;
 }
 
-// Check if the name only contains /,letters, apostrophes and whitespace
-if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-    $nameError = 'Only letters allowed';
-}
-// Check if the sname only contains /,letters, apostrophes and whitespace
-if (!preg_match("/^[a-zA-Z-' ]*$/", $sname)) {
-    $surnameError = 'Only letters allowed';
-}
-// Check if the email address is valid
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $emailError = "Invalid email format";
-}
+// Display data in form
 
-/*
- *Query the database to check if the data is present if not add the data from the form
- *else display error
- *Close connection
- */
-$dataFromForm = "INSERT INTO info (name, sname, email, password )values('$name', '$sname', '$email', '$password')";
+$result = mysqli_query($conn, "SELECT * FROM info");
 
-if (mysqli_query($conn, $dataFromForm)) {
-    // echo "<h3>Data Stored</h3>";
-    echo nl2br("\n$name\n $sname\n "
-        . "$email\n $password\n");
-} else {
-    echo "ERROR" . mysqli_error($conn);
+echo "<table border='1'>";
+
+$i = 0;
+while ($row = $result->fetch_assoc()) {
+    if ($i == 0) {
+        $i++;
+        echo "<tr>";
+        foreach ($row as $key => $value) {
+            echo "<th>" . $key . "</th>";
+        }
+        echo "</tr>";
+    }
+    echo "<tr>";
+    foreach ($row as $value) {
+        echo "<td>" . $value . "</td>";
+    }
+    echo "</tr>";
 }
+echo "</table>";
 
 ?>
 
