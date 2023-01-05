@@ -1,43 +1,8 @@
 <?php
 require_once 'db.php';
-$fname = $sname = $email = $password = '';
+$firstname = $surname = $email = $password = '';
 $nameError = $snameError = $emailError = $passwordError = '';
 $dataReceived = false;
-
-if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    empty($_POST['fname']) ? $nameError = "Name is required" : $name = test_data($_POST['fname']);
-    empty($_POST['sname']) ? $snameError = "SurnName is required" : $sname = test_data($_POST['sname']);
-    empty($_POST['email']) ? $emailError = "Email is required" : $email = test_data($_POST['email']);
-    empty($_POST['password']) ? $passwordError = "Password is required" : $password = test_data($_POST['password']);
-    $fname = $_REQUEST['fname'];
-    $sname = $_REQUEST['sname'];
-    $email = $_REQUEST['email'];
-    $password = $_REQUEST['password'];
-}
-
-// Check if the name only contains /,letters, apostrophes and whitespace
-if (!preg_match("/^[a-zA-Z-' ]*$/", $fname)) {
-    $nameError = 'Only letters allowed';
-}
-
-if (!preg_match("/^[a-zA-Z-' ]*$/", $sname)) {
-    $surnameError = 'Only letters allowed';
-}
-
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $emailError = "Invalid email format";
-}
-
-// Insert data into database
-$dataFromForm = "INSERT INTO info (name, sname, email, password) values('$fname', '$sname', '$email', '$password')";
-$result = mysqli_query($conn, $dataFromForm);
-
-if ($result) {
-    $dataReceived = true;
-} else {
-    echo "ERROR" . mysqli_error($conn);
-}
-
 
 // Test data and remove special characters
 function test_data($data)
@@ -48,10 +13,30 @@ function test_data($data)
     return $data;
 }
 
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    // Test data
+    $firstname = test_data($_POST['firstname']);
+    $surname = test_data($_POST['surname']);
+    $password = test_data($_POST['password']);
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $email = test_data($_POST['email']);
+} else {
+    $emailError = "Invalid email format";
+}
+
+$dataFromForm = "INSERT INTO info (name, sname, email, password) values('$firstname', '$surname', '$email', '$password')";
+$result = mysqli_query($conn, $dataFromForm);
+
+if ($result) {
+    $dataReceived = true;
+} else {
+    echo "ERROR" . mysqli_error($conn);
+}
+
 // Display data in form
-
 $result = mysqli_query($conn, "SELECT * FROM info");
-
 echo "<table border='1'>";
 
 $i = 0;
@@ -90,14 +75,14 @@ echo "</table>";
     <!-- Form -->
     <section>
         <form action="" method="post" class="form" name="myForm">
-            <label for="fname">First Name</label>
-            <input type="text" " data-key=" fname" name="fname" />
+            <label for="firstname">First Name</label>
+            <input type="text" " data-key=" firstname" name="firstname" />
             <span class='error'>
                 <?php echo $nameError; ?>
             </span>
 
-            <label for="sname">Surname</label>
-            <input type="text" data-key="sname" name="sname" />
+            <label for="surname">Surname</label>
+            <input type="text" data-key="surname" name="surname" />
             <span class='error'><?php echo $snameError; ?></span>
 
             <label for="email">Email</label>
@@ -116,7 +101,7 @@ echo "</table>";
             <label for="cpassword">Confirm Password</label>
             <input type="password" name="cpassword" id="cpassword" data-key="cpassword" />
 
-            <input type="submit" class="submit-button" value="Login" data-key="submit" />
+            <input type="submit" class="submit-button" value="Login" id="submitBtn" />
         </form>
     </section>
     <script src="./app.js"></script>
